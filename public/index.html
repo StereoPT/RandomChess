@@ -7,11 +7,13 @@
 
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/chessboard-0.3.0.css" rel="stylesheet">
+    <link href="css/mystyle.css" rel="stylesheet">
 
     <script src="/js/jquery.min.js"></script>
     <script src="/js/popper.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/chessboard-0.3.0.js"></script>
+    <script src="/js/chess.js"></script>
 
     <script src="/js/myscript.js"></script>
   </head>
@@ -21,17 +23,18 @@
       <a class="navbar-brand" href="#">RandomChess</a>
     </nav>
     <main role="main">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm">
-            <!-- Add Controls Here -->
+      <div class="margin-r-l-20 row">
+        <div class="col-md-4">
+          <h3>Controls</h3>
+          <div>
+            <button type="button" id="startBoard" class="btn btn-primary">Start</button>
+            <button type="button" id="clearBoard" class="btn btn-primary">Clear</button>
           </div>
-          <div class="col-sm">
-            <div id="chessBoard" style="width: 450px"></div>
-          </div>
-          <div class="col-sm">
-            <!-- Add Log Here -->
-          </div>
+        </div>
+        <div class="col-md-4">
+          <div id="chessBoard"></div>
+        </div>
+        <div class="col-md-4">
         </div>
       </div>
     </main>

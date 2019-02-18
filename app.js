@@ -6,12 +6,13 @@ app.use(express.static(__dirname + "/public"));
 app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
 app.use('/js', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/js', express.static(__dirname + '/node_modules/popper.js/dist/umd'));
+app.use('/js', express.static(__dirname + '/node_modules/chess.js'));
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 
 console.log("[RandomChess] Init");
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
+  res.sendFile("/public/index.html");
 });
 
 const port = 2909;
