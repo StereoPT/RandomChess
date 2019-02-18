@@ -7,6 +7,7 @@ app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
 app.use('/js', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/js', express.static(__dirname + '/node_modules/popper.js/dist/umd'));
 app.use('/js', express.static(__dirname + '/node_modules/chess.js'));
+app.use('/js', express.static(__dirname + '/node_modules/p5/lib'));
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 
 console.log("[RandomChess] Init");

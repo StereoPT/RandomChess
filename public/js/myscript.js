@@ -1,27 +1,38 @@
-$(document).ready(function() {
-  var chessBoard = ChessBoard('chessBoard', { draggable: true, dropOffBoard: 'trash', sparePieces: true });
-  var game = new Chess();
-  var timeout;
+var chessBoard;
+var game;
+var play = false;
 
-  var makeRandomMove = function() {
-    let possibleMoves = game.moves();
-    if(game.game_over() === true || game.in_draw() === true || possibleMoves.length === 0) return;
+let chessParams = { draggable: true, dropOffBoard: 'trash', sparePieces: true };
 
-    let randomIndex = Math.floor(Math.random() * possibleMoves.length);
-    game.move(possibleMoves[randomIndex]);
-    chessBoard.position(game.fen());
+function setup() {
+  frameRate(1.5);
+  chessBoard = ChessBoard('chessBoard', chessParams);
 
-    timeout = window.setTimeout(makeRandomMove, 500);
-  };
+  $('#startBoard').click(startBoard());
+  $('#clearBoard').click(clearBoard());
+}
 
-  $('#startBoard').click(function() {
-    game = new Chess();
-    chessBoard.start();
-    timeout = window.setTimeout(makeRandomMove, 500);
-  });
-  $('#clearBoard').click(function() {
-    chessBoard.clear();
-    game = new Chess();
-    window.clearTimeout(timeout);
-  });
-});
+function draw() {
+  if(play) makeRandomMove();
+}
+
+function makeRandomMove() {
+  let possibleMoves = game.moves();
+  if(game.game_over() === true || game.in_draw() === true || possibleMoves.length === 0) return;
+
+  let randomIndex = Math.floor(Math.random() * possibleMoves.length);
+  game.move(possibleMoves[randomIndex]);
+  chessBoard.position(game.fen());
+}
+
+function startBoard() {
+  play = true;
+  chessBoard.start();
+  game = new Chess();
+}
+
+function clearBoard() {
+  play = false;
+  chessBoard.clear();
+  game.clear();
+}
