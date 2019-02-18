@@ -6,10 +6,11 @@ let chessParams = { draggable: true, dropOffBoard: 'trash', sparePieces: true };
 
 function setup() {
   frameRate(1.5);
+  noCanvas();
   chessBoard = ChessBoard('chessBoard', chessParams);
 
-  $('#startBoard').click(startBoard());
-  $('#clearBoard').click(clearBoard());
+  $('#startBoard').click(startBoard);
+  $('#clearBoard').click(clearBoard);
 }
 
 function draw() {
