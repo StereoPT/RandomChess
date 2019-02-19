@@ -9,7 +9,7 @@
 - [x] Add Random with P5
 - [x] Add Game Log
 - [ ] Better Controls
-- [ ] Prettify Game Log
+- [x] Prettify Game Log
 
 
 ## Development Server
