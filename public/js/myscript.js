@@ -6,11 +6,11 @@ var logger;
 let chessParams = { draggable: true, dropOffBoard: 'trash', sparePieces: true };
 
 //{ captured, color, flags, from, piece, san, to }
-
 function setup() {
-  frameRate(2);
+  frameRate(1);
   noCanvas();
   chessBoard = ChessBoard('chessBoard', chessParams);
+  game = new Chess();
   logger = $('#logger');
 
   $('#startBoard').click(startBoard);
@@ -34,7 +34,6 @@ function makeRandomMove() {
 function startBoard() {
   play = true;
   chessBoard.start();
-  game = new Chess();
 }
 
 function clearBoard() {
