@@ -2,6 +2,12 @@
   width: 450px;
 }
 
+#logger {
+  max-height: 350px;
+  height: 350px;
+  overflow-y: scroll;
+}
+
 .margin-r-l-20 {
   margin-right: 20px;
   margin-left: 20px;

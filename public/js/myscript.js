@@ -1,13 +1,17 @@
 var chessBoard;
 var game;
 var play = false;
+var logger;
 
 let chessParams = { draggable: true, dropOffBoard: 'trash', sparePieces: true };
 
+//{ captured, color, flags, from, piece, san, to }
+
 function setup() {
-  frameRate(1.5);
+  frameRate(2);
   noCanvas();
   chessBoard = ChessBoard('chessBoard', chessParams);
+  logger = $('#logger');
 
   $('#startBoard').click(startBoard);
   $('#clearBoard').click(clearBoard);
@@ -22,8 +26,9 @@ function makeRandomMove() {
   if(game.game_over() === true || game.in_draw() === true || possibleMoves.length === 0) return;
 
   let randomIndex = Math.floor(Math.random() * possibleMoves.length);
-  game.move(possibleMoves[randomIndex]);
+  let theMove = game.move(possibleMoves[randomIndex]);
   chessBoard.position(game.fen());
+  gameLog(theMove);
 }
 
 function startBoard() {
@@ -36,4 +41,9 @@ function clearBoard() {
   play = false;
   chessBoard.clear();
   game.clear();
+  logger.html("");
+}
+
+function gameLog(move) {
+  logger.prepend(`<p>${move.color} Turn - Moved: ${move.piece}   | From: ${move.from}   | To: ${move.to}</p>`);
 }
