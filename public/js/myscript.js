@@ -5,7 +5,7 @@ var logger;
 
 //{ captured, color, flags, from, piece, san, to }
 function setup() {
-  frameRate(0.5);
+  frameRate(1);
   noCanvas();
 
   let chessParams = {
@@ -25,26 +25,87 @@ function setup() {
   $('#clearBoard').click(clearBoard);
 }
 
+//***** ***** ***** ***** ***** GAME AI ***** ***** ***** ***** *****//
+
 function draw() {
   if(computerTurn) {
     if(game.game_over() === true || game.in_draw() === true || game.moves().length === 0) {
       alert("Game Over!");
     };
-    makeRandomMove();
+    makeMove(calculateBestMove());
   }
 }
 
-function makeRandomMove() {
-  let possibleMoves = game.moves();
+function calculateBestMove() {
+  let thisTurnMoves = game.moves();
+  let bestMove = null;
+  let bestValue = -9999;
 
-  let randomIndex = Math.floor(Math.random() * possibleMoves.length);
-  let theMove = game.move(possibleMoves[randomIndex]);
-  chessBoard.position(game.fen());
+  for(let i = 0; i < thisTurnMoves.length; i++) {
+    let thisTurnMove = thisTurnMoves[i];
+    game.move(thisTurnMove);
 
-  gameLog(theMove);
-  computerTurn = false;
+    let boardValue = -evaluateBoard(game.board());
+    game.undo();
+    if(boardValue > bestValue) {
+      bestValue = boardValue;
+      bestMove = thisTurnMove;
+    }
+  }
+
+  console.log(`Best Value: ${bestValue}`);
+  return bestMove;
 }
 
+function evaluateBoard(board) {
+  let totalEval = 0;
+
+  for(let x = 0; x < 8; x++) {
+    for(let y = 0; y < 8; y++) {
+      totalEval += getPieceValue(board[x][y]);
+    }
+  }
+
+  return totalEval;
+}
+
+function getPieceValue(piece) {
+  if(piece === null) return 0;
+
+  let getAbsoluteValue = function(piece) {
+    switch(piece.type) {
+      case 'p': return 10;  break;
+      case 'n': return 30;  break;
+      case 'b': return 30;  break;
+      case 'r': return 50;  break;
+      case 'q': return 90;  break;
+      case 'k': return 900; break;
+      default: throw "Unknown piece type: " + piece.type;
+    }
+  }
+
+  let absoluteValue = getAbsoluteValue(piece, piece.color === 'w');
+  return piece.color === 'w' ? absoluteValue : -absoluteValue;
+}
+
+function calculateRandomMove() {
+  let possibleMoves = game.moves();
+  let randomIndex = Math.floor(Math.random() * possibleMoves.length);
+
+  return possibleMoves[randomIndex];
+}
+
+function makeMove(move) {
+  if(move) {
+    let theMove = game.move(move);
+    chessBoard.position(game.fen());
+
+    logMove(theMove);
+    computerTurn = false;
+  }
+}
+
+//***** ***** ***** ***** ***** DOCUMENT ***** ***** ***** ***** *****//
 function startBoard() {
   chessBoard.start();
 }
@@ -56,11 +117,12 @@ function clearBoard() {
   logger.html("");
 }
 
-function gameLog(move) {
+function logMove(move) {
   let image = `<img class="img-thumbnail" src="img/chesspieces/wikipedia/${move.color}${move.piece.toUpperCase()}.png" style="height: 40px;"/>`;
   logger.prepend(`<li class="list-group-item">${image}   <b>From:</b> ${move.from}   | <b>To:</b> ${move.to}</li>`);
 }
 
+//***** ***** ***** ***** ***** PLAYER CONTROLS ***** ***** ***** ***** *****//
 var onDragStart = function(source, piece, position, orientation) {
   if(game.in_checkmate() === true || game.in_draw() === true || piece.search(/^b/) !== -1) {
     return false;
@@ -71,7 +133,7 @@ var onDrop = function(source, target) {
   let move = game.move({ from: source, to: target, promotion: 'q'});
   removeSquares();
   if(move === null) { return 'snapback'; }
-  gameLog(move);
+  logMove(move);
   computerTurn = true;
 };
 
@@ -86,13 +148,13 @@ var onMouseoverSquare = function(square, piece) {
 }
 
 var onMouseoutSquare = function(square, piece) {
-  console.log("onMouseoutSquare");
   removeSquares();
 };
 
 var onSnapEnd = function () {
     chessBoard.position(game.fen());
 };
+
 //***** ***** ***** ***** ***** RENDER SQUARES ***** ***** ***** ***** *****//
 var renderSquare = function(square) {
   let squareEl = $(`#chessBoard .square-${square}`);
