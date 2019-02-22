@@ -1,16 +1,14 @@
 # RandomChess
 
-![RandomChess](https://raw.githubusercontent.com/StereoPT/RandomChess/master/screens/randomchess_003.jpg)
+![RandomChess](https://raw.githubusercontent.com/StereoPT/RandomChess/master/screens/randomchess_004.jpg)
 
 ## ToDo List:
 
-- [x] Add P5.js
-- [x] Add Random Gameplay
 - [x] Add Random with P5
 - [x] Add Game Log
-- [ ] Better Controls
 - [x] Prettify Game Log
-
+- [x] Computer Pieces move Randomly
+- [ ] Calculate Best Possible Move
 
 ## Development Server
 
