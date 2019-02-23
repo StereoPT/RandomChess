@@ -8,7 +8,13 @@
 - [x] Add Game Log
 - [x] Prettify Game Log
 - [x] Computer Pieces move Randomly
-- [ ] Calculate Best Possible Move
+- [x] Calculate Best Possible Move
+- [x] Calculate Minimax Move
+- [ ] Improve Controls
+	- [ ] Depth Selector
+	- [ ] Minimax Runtime Calculator
+	- [ ] Positions Evaluated
+	
 
 ## Development Server
 

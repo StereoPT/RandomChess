@@ -2,6 +2,7 @@ var chessBoard;
 var game;
 var computerTurn = false;
 var logger;
+var positionCount;
 
 //{ captured, color, flags, from, piece, san, to }
 function setup() {
@@ -19,6 +20,7 @@ function setup() {
   };
   chessBoard = ChessBoard('chessBoard', chessParams);
   game = new Chess();
+  positionCount = 0;
 
   logger = $('#logger');
   $('#startBoard').click(startBoard);
@@ -32,10 +34,74 @@ function draw() {
     if(game.game_over() === true || game.in_draw() === true || game.moves().length === 0) {
       alert("Game Over!");
     };
-    makeMove(calculateBestMove());
+    makeMove(calculateMinimaxMove());
   }
 }
 
+function makeMove(move) {
+  if(move) {
+    let theMove = game.move(move);
+    chessBoard.position(game.fen());
+
+    logMove(theMove);
+    computerTurn = false;
+  }
+}
+
+function calculateMinimaxMove() {
+  positionCount = 0;
+  let depth = 2;
+
+  let minimaxMove = minimaxRoot(depth, game, true);
+  return minimaxMove;
+}
+
+function minimaxRoot(depth, game, isMaximisingPlayer) {
+  let thisTurnMoves = game.moves();
+  let bestMove = null;
+  let bestValue = -9999;
+
+  for(let i = 0; i < thisTurnMoves.length; i++) {
+    let thisTurnMove = thisTurnMoves[i];
+    game.move(thisTurnMove);
+
+    let boardValue = minimax(depth - 1, game, !isMaximisingPlayer);
+    game.undo();
+    if(boardValue >= bestValue) {
+      bestValue = boardValue;
+      bestMove = thisTurnMove;
+    }
+  }
+
+  return bestMove;
+};
+
+function minimax(depth, game, isMaximisingPlayer) {
+  positionCount++;
+  if(depth === 0) { return -evaluateBoard(game.board()); }
+
+  let thisTurnMoves = game.moves();
+
+  if(isMaximisingPlayer) {
+    let bestValue = -9999;
+    for(let i = 0; i < thisTurnMoves.length; i++) {
+      game.move(thisTurnMoves[i]);
+      bestValue = Math.max(bestValue, minimax(depth - 1, game, !isMaximisingPlayer));
+      game.undo();
+    }
+    return bestValue;
+  } else {
+    let bestValue = 9999;
+    for(let i = 0; i < thisTurnMoves.length; i++) {
+      game.move(thisTurnMoves[i]);
+      bestValue = Math.min(bestValue, minimax(depth - 1, game, !isMaximisingPlayer));
+      game.undo();
+    }
+    return bestValue;
+  }
+};
+
+//***** BEST MOVE *****//
 function calculateBestMove() {
   let thisTurnMoves = game.moves();
   let bestMove = null;
@@ -88,6 +154,7 @@ function getPieceValue(piece) {
   return piece.color === 'w' ? absoluteValue : -absoluteValue;
 }
 
+//***** RANDOM *****//
 function calculateRandomMove() {
   let possibleMoves = game.moves();
   let randomIndex = Math.floor(Math.random() * possibleMoves.length);
@@ -95,19 +162,10 @@ function calculateRandomMove() {
   return possibleMoves[randomIndex];
 }
 
-function makeMove(move) {
-  if(move) {
-    let theMove = game.move(move);
-    chessBoard.position(game.fen());
-
-    logMove(theMove);
-    computerTurn = false;
-  }
-}
-
 //***** ***** ***** ***** ***** DOCUMENT ***** ***** ***** ***** *****//
 function startBoard() {
   chessBoard.start();
+  positionCount = 0;
 }
 
 function clearBoard() {
