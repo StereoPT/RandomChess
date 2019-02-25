@@ -2,11 +2,11 @@ var chessBoard;
 var game;
 var computerTurn = false;
 var logger;
-var positionCount;
+var searchDepth;
 
 //{ captured, color, flags, from, piece, san, to }
 function setup() {
-  frameRate(1);
+  frameRate(5);
   noCanvas();
 
   let chessParams = {
@@ -20,11 +20,11 @@ function setup() {
   };
   chessBoard = ChessBoard('chessBoard', chessParams);
   game = new Chess();
-  positionCount = 0;
 
   logger = $('#logger');
   $('#startBoard').click(startBoard);
   $('#clearBoard').click(clearBoard);
+  $('#depthList li a').on('click', depthTrigger);
 }
 
 //***** ***** ***** ***** ***** GAME AI ***** ***** ***** ***** *****//
@@ -40,20 +40,23 @@ function draw() {
 
 function makeMove(move) {
   if(move) {
-    let theMove = game.move(move);
+    let theMove = game.move(move[0]);
     chessBoard.position(game.fen());
 
-    logMove(theMove);
+    logMove(theMove, move[1]);
     computerTurn = false;
   }
 }
 
 function calculateMinimaxMove() {
-  positionCount = 0;
-  let depth = 2;
+  if(!searchDepth) searchDepth = 2;
 
-  let minimaxMove = minimaxRoot(depth, game, true);
-  return minimaxMove;
+  let beforeDate = new Date().getTime();
+  let minimaxMove = minimaxRoot(searchDepth, game, true);
+  let afterDate = new Date().getTime();
+  let moveTime = (afterDate - beforeDate);
+
+  return [minimaxMove, moveTime];
 }
 
 function minimaxRoot(depth, game, isMaximisingPlayer) {
@@ -77,7 +80,6 @@ function minimaxRoot(depth, game, isMaximisingPlayer) {
 };
 
 function minimax(depth, game, isMaximisingPlayer) {
-  positionCount++;
   if(depth === 0) { return -evaluateBoard(game.board()); }
 
   let thisTurnMoves = game.moves();
@@ -119,7 +121,7 @@ function calculateBestMove() {
     }
   }
 
-  console.log(`Best Value: ${bestValue}`);
+  //console.log(`Best Value: ${bestValue}`);
   return bestMove;
 }
 
@@ -165,7 +167,6 @@ function calculateRandomMove() {
 //***** ***** ***** ***** ***** DOCUMENT ***** ***** ***** ***** *****//
 function startBoard() {
   chessBoard.start();
-  positionCount = 0;
 }
 
 function clearBoard() {
@@ -175,9 +176,17 @@ function clearBoard() {
   logger.html("");
 }
 
-function logMove(move) {
+function depthTrigger() {
+  searchDepth = $(this).text();
+  $('#depthSelector').text(searchDepth);
+}
+
+function logMove(move, time) {
   let image = `<img class="img-thumbnail" src="img/chesspieces/wikipedia/${move.color}${move.piece.toUpperCase()}.png" style="height: 40px;"/>`;
-  logger.prepend(`<li class="list-group-item">${image}   <b>From:</b> ${move.from}   | <b>To:</b> ${move.to}</li>`);
+  let list = `<li class="list-group-item">${image}   <b>From:</b> ${move.from}   | <b>To:</b> ${move.to}`;
+    if(time) list += `<span class="float-right"><b>Time:</b> ${time}ms</span>`;
+  list += '</li>';
+  logger.prepend(list);
 }
 
 //***** ***** ***** ***** ***** PLAYER CONTROLS ***** ***** ***** ***** *****//
