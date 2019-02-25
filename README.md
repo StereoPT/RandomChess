@@ -4,16 +4,17 @@
 
 ## ToDo List:
 
-- [x] Add Random with P5
-- [x] Add Game Log
-- [x] Prettify Game Log
 - [x] Computer Pieces move Randomly
 - [x] Calculate Best Possible Move
 - [x] Calculate Minimax Move
 - [x] Improve Controls
 	- [x] Depth Selector
 	- [x] Minimax Runtime Calculator
-
+- [x] Alpha-Beta Pruning
+- [x] Improved Piece Evaluation
+- [ ] Game Gif
+- [ ] Re-Do ReadMe
+	
 
 ## Development Server
 
