@@ -68,7 +68,7 @@ function minimaxRoot(depth, game, isMaximisingPlayer) {
     let thisTurnMove = thisTurnMoves[i];
     game.move(thisTurnMove);
 
-    let boardValue = minimax(depth - 1, game, !isMaximisingPlayer);
+    let boardValue = minimax(depth - 1, game, -10000, 10000, !isMaximisingPlayer);
     game.undo();
     if(boardValue >= bestValue) {
       bestValue = boardValue;
@@ -79,7 +79,7 @@ function minimaxRoot(depth, game, isMaximisingPlayer) {
   return bestMove;
 };
 
-function minimax(depth, game, isMaximisingPlayer) {
+function minimax(depth, game, alpha, beta, isMaximisingPlayer) {
   if(depth === 0) { return -evaluateBoard(game.board()); }
 
   let thisTurnMoves = game.moves();
@@ -88,16 +88,20 @@ function minimax(depth, game, isMaximisingPlayer) {
     let bestValue = -9999;
     for(let i = 0; i < thisTurnMoves.length; i++) {
       game.move(thisTurnMoves[i]);
-      bestValue = Math.max(bestValue, minimax(depth - 1, game, !isMaximisingPlayer));
+      bestValue = Math.max(bestValue, minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer));
       game.undo();
+      alpha = Math.max(alpha, bestValue);
+      if(beta <= alpha) { return bestValue; }
     }
     return bestValue;
   } else {
     let bestValue = 9999;
     for(let i = 0; i < thisTurnMoves.length; i++) {
       game.move(thisTurnMoves[i]);
-      bestValue = Math.min(bestValue, minimax(depth - 1, game, !isMaximisingPlayer));
+      bestValue = Math.min(bestValue, minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer));
       game.undo();
+      beta = Math.min(beta, bestValue);
+      if(beta <= alpha) { return bestValue; }
     }
     return bestValue;
   }
