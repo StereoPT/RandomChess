@@ -244,6 +244,7 @@ function calculateRandomMove() {
 //***** ***** ***** ***** ***** DOCUMENT ***** ***** ***** ***** *****//
 function startBoard() {
   chessBoard.start();
+  game = new Chess();
 }
 
 function clearBoard() {

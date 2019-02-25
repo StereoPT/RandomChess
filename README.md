@@ -1,26 +1,38 @@
 # RandomChess
 
-![RandomChess](https://raw.githubusercontent.com/StereoPT/RandomChess/master/screens/randomchess_005.jpg)
+![RandomChess](https://raw.githubusercontent.com/StereoPT/RandomChess/master/screens/RandomChess.gif)
 
-## ToDo List:
+## Features
 
-- [x] Computer Pieces move Randomly
-- [x] Calculate Best Possible Move
-- [x] Calculate Minimax Move
-- [x] Improve Controls
-	- [x] Depth Selector
-	- [x] Minimax Runtime Calculator
-- [x] Alpha-Beta Pruning
-- [x] Improved Piece Evaluation
-- [ ] Game Gif
-- [ ] Re-Do ReadMe
-	
+- Random Chess Moves (in code, not being used)
+- Best Move Possible (in code, not being used)
+- Minimax with Alpha-Beta Pruning
+- Improved Board Evaluation
+
+
+## ToDo:
+
+- [ ] Add New Controls
+	- [ ] Undo Funcionality
+	- [ ] Save & Load Game
+	- [ ] Replay Game
+- [ ] New User Interface
+- [ ] Play against API Chess
+
 
 ## Development Server
 
+First Run `npm install`
 Run with `nodemon app.js`
 
 Navigate to `localhost:2909` to Play!
+
+
+## Release History
+
+ - 1.0
+	 - First Release | Simple functionalities Implemented.
+
 
 ## Meta
 
