@@ -1,5 +1,7 @@
 # RandomChess
 
+![version](https://img.shields.io/badge/version-1.0-blue.svg) ![passing_build](https://img.shields.io/badge/build-passing-brightgreen.svg) ![license](https://img.shields.io/badge/license-MIT-blue.svg)
+
 ![RandomChess](https://raw.githubusercontent.com/StereoPT/RandomChess/master/screens/RandomChess.gif)
 
 ## Features
